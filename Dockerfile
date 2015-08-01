@@ -1,65 +1,58 @@
-FROM ubuntu:trusty
-
-# Set Node Environment (this can be overriden by docker run -e parameter)
-ENV NODE_ENV production
+FROM debian:jessie
 
 # Create nginx user
 RUN groupadd -r nginx && useradd -r -g nginx nginx
 
-#apt-get installs
-RUN DEBIAN_FRONTEND=noninteractive \
-    apt-get update && \
-    apt-get install -y \
-        build-essential \
-        curl \
-        git \
-        pwgen \
-        python-setuptools \
-        rlwrap \
-        software-properties-common \
-        wget && \
-        add-apt-repository -y ppa:nginx/stable && \
-        apt-get update && \
-        apt-get install -y nginx && \
-        rm -r /var/lib/apt/lists/*
+#apt-get base installs
+RUN echo "deb http://nginx.org/packages/debian/ wheezy nginx" >> /etc/apt/sources.list.d/nginx.list \
+    && apt-key adv --fetch-keys "http://nginx.org/keys/nginx_signing.key" \
+    && apt-get update \
+    && apt-get install -y --force-yes --no-install-recommends \
+    apt-transport-https \
+    build-essential \
+    curl \
+    ca-certificates \
+    git \
+    lsb-release \
+    nginx \
+    python-all \
+    python-pip \
+    rlwrap \
+    supervisor \
+    && pip install supervisor-stdout \
+    && rm -rf /var/lib/apt/lists/*;
 
-# Install Node and Gulp
-# (from Node v0.12's recommend instructions: https://nodesource.com/blog/nodejs-v012-iojs-and-the-nodesource-linux-repositories)
-RUN curl -sL https://deb.nodesource.com/setup_0.12 | sudo bash -
-RUN DEBIAN_FRONTEND=noninteractive \
-    apt-get install -y nodejs && \
-    npm install gulp -g
+#install node & gulp
+RUN curl https://deb.nodesource.com/node_0.12/pool/main/n/nodejs/nodejs_0.12.4-1nodesource1~jessie1_amd64.deb > node.deb \
+    && dpkg -i node.deb \
+    && rm node.deb \
+    && npm install gulp -g
 
 # Supervisor Config
-RUN /usr/bin/easy_install supervisor && \
-    /usr/bin/easy_install supervisor-stdout
-ADD ./docker/supervisord.conf /etc/supervisord.conf
+COPY ./docker/supervisord.conf /etc/supervisord.conf
 
 # nginx config
-RUN rm -Rf /etc/nginx/conf.d/* && \
-    mkdir -p /etc/nginx/sites-available/ && \
-    mkdir -p /etc/nginx/sites-enabled/ && \
-    rm -Rf /etc/nginx/nginx.conf && \
-    rm -f /etc/nginx/sites-enabled/default
+RUN rm -Rf /etc/nginx/conf.d/* \
+    && mkdir -p /etc/nginx/sites-available/ \
+    && mkdir -p /etc/nginx/sites-enabled/ \
+    && rm -Rf /etc/nginx/nginx.conf \
+    && rm -f /etc/nginx/sites-enabled/default
 COPY ./docker/nginx.conf /etc/nginx/
-COPY ./docker/portal-nginx.conf /etc/nginx/sites-enabled/
+COPY ./docker/app-nginx.conf /etc/nginx/sites-enabled/
 
 # Create folders for source files and logs
-RUN mkdir -p /usr/share/rewind-portal && \
-    chmod 777 /usr/share/rewind-portal && \
-    mkdir -p /usr/share/rewind-portal/build/dev/logs && \
-    chmod 777 /usr/share/rewind-portal/build/dev/logs && \
-    mkdir -p /var/log/node/
+RUN mkdir -p /usr/src/app \
+    && chmod 777 /usr/src/app \
+    && mkdir -p /var/log/node/
+
+# Set Node Environment (this can be overriden by docker run -e parameter)
+ENV NODE_ENV production
 
 # Copy across source files
-WORKDIR /usr/share/rewind-portal
-# First just add package.json and bower.json (so docker can cache node_modules in intermediate container)
+WORKDIR /usr/src/app
+# First just add package.json  (so docker can cache node_modules in intermediate container)
 COPY ./package.json ./
 RUN npm --production=false install
-COPY ./bower.json ./
-COPY ./.bowerrc ./
-RUN mkdir ./client/ && \
-    bower install --config.interactive=false --allow-root
 
 # COPY rest of folders/files
 COPY . ./
@@ -70,8 +63,7 @@ RUN gulp build
 COPY ./docker/start.sh /start.sh
 RUN chmod 755 /start.sh
 
-# Expose Ports
-EXPOSE 5000
+# Ports
 EXPOSE 80
 
 CMD ["/bin/bash", "/start.sh"]
