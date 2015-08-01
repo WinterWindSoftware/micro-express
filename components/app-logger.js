@@ -1,6 +1,6 @@
-var winston = require('winston');
-var util = require('util');
-var _ = require('lodash');
+import winston from 'winston';
+import util from 'util';
+import _ from 'lodash';
 
 var logConfig = {
     levels: {
@@ -34,9 +34,7 @@ var consoleTransport = {
     prettyPrint: true,
     colorize: true,
     silent: false,
-    timestamp: () => {
-        return new Date().toUTCString();
-    }
+    timestamp: true
 };
 
 var appLogger = new winston.Logger({
@@ -54,4 +52,4 @@ appLogger.error = function(msg, err, metadata) {
     return this.log('error', util.format('%s. %s', msg, err), extra);
 };
 
-module.exports = appLogger;
+export default appLogger;

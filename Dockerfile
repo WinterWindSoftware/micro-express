@@ -28,9 +28,6 @@ RUN curl https://deb.nodesource.com/node_0.12/pool/main/n/nodejs/nodejs_0.12.4-1
     && rm node.deb \
     && npm install gulp -g
 
-# Supervisor Config
-COPY ./docker/supervisord.conf /etc/supervisord.conf
-
 # nginx config
 RUN rm -Rf /etc/nginx/conf.d/* \
     && mkdir -p /etc/nginx/sites-available/ \
@@ -59,7 +56,8 @@ COPY . ./
 
 RUN gulp build
 
-# Copy Supervisord startup script
+# Supervisor Config and  startup script
+COPY ./docker/supervisord.conf /etc/supervisord.conf
 COPY ./docker/start.sh /start.sh
 RUN chmod 755 /start.sh
 
