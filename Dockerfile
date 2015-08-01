@@ -1,7 +1,7 @@
 FROM debian:jessie
 
 # Create nginx user
-RUN groupadd -r nginx && useradd -r -g nginx nginx
+RUN groupadd -r webapp && useradd -r -g webapp webapp
 
 #apt-get base installs
 RUN echo "deb http://nginx.org/packages/debian/ wheezy nginx" >> /etc/apt/sources.list.d/nginx.list \
@@ -28,15 +28,6 @@ RUN curl https://deb.nodesource.com/node_0.12/pool/main/n/nodejs/nodejs_0.12.4-1
     && rm node.deb \
     && npm install gulp -g
 
-# nginx config
-RUN rm -Rf /etc/nginx/conf.d/* \
-    && mkdir -p /etc/nginx/sites-available/ \
-    && mkdir -p /etc/nginx/sites-enabled/ \
-    && rm -Rf /etc/nginx/nginx.conf \
-    && rm -f /etc/nginx/sites-enabled/default
-COPY ./docker/nginx.conf /etc/nginx/
-COPY ./docker/app-nginx.conf /etc/nginx/sites-enabled/
-
 # Create folders for source files and logs
 RUN mkdir -p /usr/src/app \
     && chmod 777 /usr/src/app \
@@ -55,6 +46,15 @@ RUN npm --production=false install
 COPY . ./
 
 RUN gulp build
+
+# nginx config
+RUN rm -Rf /etc/nginx/conf.d/* \
+    && mkdir -p /etc/nginx/sites-available/ \
+    && mkdir -p /etc/nginx/sites-enabled/ \
+    && rm -Rf /etc/nginx/nginx.conf \
+    && rm -f /etc/nginx/sites-enabled/default
+COPY ./docker/nginx.conf /etc/nginx/
+COPY ./docker/app-nginx.conf /etc/nginx/sites-enabled/
 
 # Supervisor Config and  startup script
 COPY ./docker/supervisord.conf /etc/supervisord.conf
