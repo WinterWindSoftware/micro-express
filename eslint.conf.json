@@ -1,0 +1,75 @@
+{
+    "parser": "babel-eslint",
+    "plugins": [
+        //"angular"
+    ],
+    "settings": {
+        "ecmascript": 6
+    },
+    "globals": {
+        "angular": false,
+        "_": false,
+        "inject": false,
+        "appSettings": false
+    },
+    "ecmaFeatures": {
+        "modules": true,
+        "classes": true,
+        "arrowFunctions": true,
+        "binaryLiterals": true,
+        "blockBindings": true,
+        "defaultParams": true,
+        "forOf": true,
+        "generators": true,
+        "objectLiteralComputedProperties": true,
+        "objectLiteralDuplicateProperties": true,
+        "objectLiteralShorthandMethods": true,
+        "objectLiteralShorthandProperties": true,
+        "octalLiterals": true,
+        "regexUFlag": true,
+        "regexYFlag": true,
+        "superInFunctions": true,
+        "templateStrings": true,
+        "unicodeCodePointEscapes": true,
+        "globalReturn": true
+    },
+    "env": {
+        "mocha": true,
+        "node": true,
+        "browser": true,
+        "es6": true,
+        "jquery": true,
+        "jasmine": true
+    },
+    "rules": {
+        "strict": [2, "never"],
+        "no-empty": 0,
+        "indent": 2,
+        "quotes": [
+            1,
+            "single"
+        ],
+        "no-multi-spaces": [
+            1,
+            {
+                "exceptions": {
+                    "VariableDeclarator": true,
+                    "FunctionExpression": true
+                }
+            }
+        ],
+        "key-spacing": [
+            0,
+            {
+                "align": "value"
+            }
+        ],
+        "no-underscore-dangle": 0,
+        "eol-last": 0,
+        "no-use-before-define": 0,
+        "new-cap": 0,
+        "angular/ng_controller_name": 0,
+        "angular/ng_controller_as_route": 0,
+        "angular/ng_controller_as_vm": 0
+    }
+}

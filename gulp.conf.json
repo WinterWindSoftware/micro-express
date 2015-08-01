@@ -1,0 +1,13 @@
+{
+    "dest": "./build",
+    "scripts": [
+        "**/*.js",
+        "!node_modules/**/*",
+        "!build/**/*"
+    ],
+    "tests": [
+        "**/*.spec.js",
+        "!node_modules/**/*",
+        "!build/**/*"
+    ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "micro-express",
+  "version": "0.1.0",
+  "description": "Quick start repo for building microservices with Node, Express and Docker",
+  "main": "server.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "author": "Paul Swail",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-eslint": "^4.0.5",
+    "del": "^1.2.0",
+    "eslint": "^1.0.0",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.2.0",
+    "gulp-eslint": "^1.0.0",
+    "gulp-load-plugins": "^1.0.0-rc.1",
+    "gulp-nodemon": "^2.0.3"
+  },
+  "dependencies": {
+    "express": "^4.13.2",
+    "lodash": "^3.10.0"
+  }
+}
