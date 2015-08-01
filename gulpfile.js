@@ -26,11 +26,21 @@ gulp.task('html', function() {
         .on('error', throwErr);
 });
 
+gulp.task('styles', function() {
+    var cfg = config.client.less;
+    return gulp.src(cfg.main)
+        .pipe(plugins.less({
+            paths: cfg.paths
+        }))
+        .pipe(gulp.dest(cfg.dest))
+        .on('error', throwErr);
+});
+
 gulp.task('lint', function() {
     return lintFiles(config.server.scripts);
 });
 
-gulp.task('build', ['clean', 'lint', 'server-scripts', 'html'], function() {});
+gulp.task('build', ['clean', 'lint', 'server-scripts', 'html', 'styles'], function() {});
 
 gulp.task('serve', ['build', 'env:dev'], function() {
     //watch dev src files for changes

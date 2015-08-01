@@ -12,6 +12,13 @@
         "dest": "./build/client",
         "html": [
             "./client/**/*.html"
-        ]
+        ],
+        "less": {
+            "main": "./client/app.less",
+            "paths": [
+                "./client/**/*"
+            ],
+            "dest": "./build/client/css"
+        }
     }
 }

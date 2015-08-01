@@ -1,21 +1,23 @@
 import express from 'express';
-import routes from './routes/routes';
 import http from 'http';
-import logger from './components/app-logger';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
+import config from './config/config'
+import logger from './components/app-logger';
+import routes from './routes/routes';
 
 var app = express();
 
-//Wire-up middleware for parsing JSON and logging HTTP requests
+//Wire-up middleware for parsing JSON, logging HTTP requests and serving static content
 app.use(bodyParser.json());
 app.use(morgan(':date[iso] :method :url :status :res[content-length] - :response-time ms'));
+app.use(express.static(`${config.root}/client`));
 
 //Wire-up routes
 routes(app);
 
 // Start server
 var server = http.createServer(app);
-server.listen(5000, () => {
+server.listen(config.port, () => {
     logger.info('Express server started.');
 });
