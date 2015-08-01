@@ -8,29 +8,29 @@ var config = require('./gulp.conf.json');
 gulp.task('default', ['build'], function() {});
 
 gulp.task('clean', function(cb) {
-    del.sync([config.dest]);
+    del.sync([config.server.dest]);
     cb();
 });
 
 gulp.task('server-scripts', function() {
-    return gulp.src(config.scripts)
+    return gulp.src(config.server.scripts)
         .pipe(plugins.babel())
-        .pipe(gulp.dest(config.dest))
+        .pipe(gulp.dest(config.server.dest))
         .on('error', throwErr);
 });
 
 gulp.task('lint', function() {
-    return lintFiles(config.scripts);
+    return lintFiles(config.server.scripts);
 });
 
 gulp.task('build', ['clean', 'lint', 'server-scripts'], function() {});
 
 gulp.task('serve', ['build', 'env:dev'], function() {
     //watch dev src files for changes
-    gulp.watch(config.scripts, ['server-scripts']);
+    gulp.watch(config.server.scripts, ['server-scripts']);
     //Run nodemon in dest folder
     nodemon({
-        script: config.dest + '/server.js',
+        script: config.server.dest + '/server.js',
         ext: 'js',
         env: { 'NODE_ENV': 'development' }
     });

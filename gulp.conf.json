@@ -1,13 +1,11 @@
 {
-    "dest": "./build",
-    "scripts": [
-        "**/*.js",
-        "!node_modules/**/*",
-        "!build/**/*"
-    ],
-    "tests": [
-        "**/*.spec.js",
-        "!node_modules/**/*",
-        "!build/**/*"
-    ]
+    "server": {
+        "dest": "./build/server",
+        "scripts": [
+            "server/**/*.js"
+        ],
+        "tests": [
+            "server/**/*.spec.js"
+        ]
+    }
 }

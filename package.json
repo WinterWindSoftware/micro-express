@@ -2,7 +2,7 @@
   "name": "micro-express",
   "version": "0.1.0",
   "description": "Quick start repo for building microservices with Node, Express and Docker",
-  "main": "server.js",
+  "main": "server/server.js",
   "scripts": {
     "test": "gulp test"
   },
