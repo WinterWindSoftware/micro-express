@@ -8,7 +8,7 @@ var config = require('./gulp.conf.json');
 gulp.task('default', ['build'], function() {});
 
 gulp.task('clean', function(cb) {
-    del.sync([config.server.dest]);
+    del.sync([config.server.dest, config.client.dest]);
     cb();
 });
 
@@ -19,11 +19,18 @@ gulp.task('server-scripts', function() {
         .on('error', throwErr);
 });
 
+gulp.task('html', function() {
+    var cfg = config.client;
+    return gulp.src(cfg.html)
+        .pipe(gulp.dest(cfg.dest))
+        .on('error', throwErr);
+});
+
 gulp.task('lint', function() {
     return lintFiles(config.server.scripts);
 });
 
-gulp.task('build', ['clean', 'lint', 'server-scripts'], function() {});
+gulp.task('build', ['clean', 'lint', 'server-scripts', 'html'], function() {});
 
 gulp.task('serve', ['build', 'env:dev'], function() {
     //watch dev src files for changes
