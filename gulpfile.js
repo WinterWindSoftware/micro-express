@@ -2,7 +2,6 @@ var gulp = require('gulp');
 var _ = require('lodash');
 var plugins = require('gulp-load-plugins')();
 var del = require('del');
-var nodemon = require('gulp-nodemon');
 var config = require('./gulp.conf.json');
 
 gulp.task('default', ['build'], function() {});
@@ -46,7 +45,7 @@ gulp.task('serve', ['build', 'env:dev'], function() {
     //watch dev src files for changes
     gulp.watch(config.server.scripts, ['server-scripts']);
     //Run nodemon in dest folder
-    nodemon({
+    plugins.nodemon({
         script: config.server.dest + '/server.js',
         ext: 'js',
         env: { 'NODE_ENV': 'development' }
