@@ -1,5 +1,5 @@
 import express from 'express';
-import logger from '../../components/app-logger';
+import logger from '../../../components/app-logger';
 var router = express.Router();
 
 router.get('/', (req, res) => {
