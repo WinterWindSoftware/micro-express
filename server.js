@@ -1,13 +1,22 @@
 import express from 'express';
-let app = express();
+import routes from './routes/routes';
+import http from 'http';
+import logger from './components/app-logger';
+import bodyParser from 'body-parser';
+import morgan from 'morgan';
 
-app.get('/', (req, res) => {
-    res.send('hello there world');
-});
+var app = express();
 
-var server = app.listen(5000, () => {
-    var host = server.address().address;
-    var port = server.address().port;
+//Wire-up middleware for parsing JSON and logging HTTP requests
+app.use(bodyParser.json());
+app.use(morgan(':date :method :url :status :res[content-length] - :response-time ms'));
 
-    console.log('Example app listening at http://%s:%s', host, port);
+//Wire-up routes
+routes(app);
+
+// Start server
+var server = http.createServer(app);
+logger.profile('Express server startup');
+server.listen(5000, () => {
+    logger.profile('Express startup');
 });
