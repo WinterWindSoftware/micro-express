@@ -2,7 +2,7 @@ import express from 'express';
 import http from 'http';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
-import config from './config/config'
+import config from './config'
 import logger from './components/app-logger';
 import routes from './routes';
 

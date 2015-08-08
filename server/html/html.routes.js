@@ -1,5 +1,5 @@
 import express from 'express';
-import config from '../config/config';
+import config from '../config';
 import logger from '../components/app-logger';
 var router = express.Router();
 
