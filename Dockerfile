@@ -45,7 +45,7 @@ RUN npm --production=false install
 # COPY rest of folders/files
 COPY . ./
 
-RUN gulp build
+RUN gulp build && gulp test
 
 # nginx config
 RUN rm -Rf /etc/nginx/conf.d/* \

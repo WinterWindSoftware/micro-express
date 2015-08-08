@@ -15,14 +15,14 @@ gulp.task('server-scripts', function() {
     return gulp.src(config.server.scripts)
         .pipe(plugins.babel())
         .pipe(gulp.dest(config.server.dest))
-        .on('error', throwErr);
+        .on('error', handleError);
 });
 
 gulp.task('html', function() {
     var cfg = config.client;
     return gulp.src(cfg.html)
         .pipe(gulp.dest(cfg.dest))
-        .on('error', throwErr);
+        .on('error', handleError);
 });
 
 gulp.task('styles', function() {
@@ -32,7 +32,7 @@ gulp.task('styles', function() {
             paths: cfg.paths
         }))
         .pipe(gulp.dest(cfg.dest))
-        .on('error', throwErr);
+        .on('error', handleError);
 });
 
 gulp.task('lint', function() {
@@ -63,7 +63,8 @@ gulp.task('env:test', function() {
 gulp.task('test:server', ['lint', 'server-scripts', 'env:test'], function() {
     return gulp.src('./build/server/**/*.spec.js', {read: false})
         .pipe(plugins.mocha({reporter: 'spec'}))
-        .on('error', throwErr);
+        .pipe(plugins.exit())
+        .on('error', handleError);
 });
 
 gulp.task('test', ['test:server'], function() {});
@@ -73,9 +74,10 @@ function lintFiles(files) {
         .pipe(plugins.eslint('./eslint.conf.json'))
         .pipe(plugins.eslint.format())
         .pipe(plugins.eslint.failAfterError())
-        .on('error', throwErr);
+        .on('error', handleError);
 }
 
-function throwErr(err) {
-    throw err;
+function handleError(err) {
+    console.error(err);
+    this.emit('end');
 }
