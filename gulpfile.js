@@ -66,6 +66,8 @@ gulp.task('test:server', ['lint', 'server-scripts', 'env:test'], function() {
         .on('error', throwErr);
 });
 
+gulp.task('test', ['test:server'], function() {});
+
 function lintFiles(files) {
     return gulp.src(files)
         .pipe(plugins.eslint('./eslint.conf.json'))
