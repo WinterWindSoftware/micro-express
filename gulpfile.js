@@ -60,6 +60,12 @@ gulp.task('env:test', function() {
     process.env.NODE_ENV = 'test';
 });
 
+gulp.task('test:server', ['lint', 'server-scripts', 'env:test'], function() {
+    return gulp.src('./build/server/**/*.spec.js', {read: false})
+        .pipe(plugins.mocha({reporter: 'spec'}))
+        .on('error', throwErr);
+});
+
 function lintFiles(files) {
     return gulp.src(files)
         .pipe(plugins.eslint('./eslint.conf.json'))

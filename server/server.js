@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import config from './config/config'
 import logger from './components/app-logger';
-import routes from './routes/routes';
+import routes from './routes';
 
 var app = express();
 
@@ -21,3 +21,5 @@ var server = http.createServer(app);
 server.listen(config.port, () => {
     logger.info('Express server started.');
 });
+
+export default app;

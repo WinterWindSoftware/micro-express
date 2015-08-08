@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-# Create nginx user
+# Create webapp user
 RUN groupadd -r webapp && useradd -r -g webapp webapp
 
 #apt-get base installs
