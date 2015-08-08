@@ -8,6 +8,7 @@ router.get('/', (req, res) => {
     });
 });
 
+router.use('/', require('./auth/auth.controller'));
 router.use('/system', require('./system/system.controller'));
 
 // ERROR HANDLERS (these must be wired up last)
